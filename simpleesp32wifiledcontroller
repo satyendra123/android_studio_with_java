@@ -1,0 +1,115 @@
+#step-1 AndroidManifest.xml
+<uses-permission android:name="android.permission.INTERNET"/>
+
+#step-2 activity_main.xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:gravity="center">
+
+    <Button
+        android:id="@+id/btnTurnOn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Turn On LED"/>
+
+    <Button
+        android:id="@+id/btnTurnOff"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Turn Off LED"
+        android:layout_marginTop="16dp"/>
+
+</LinearLayout>
+
+#step-3 MainActivity.java
+package com.example.esp32ledcontrol;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+public class MainActivity extends AppCompatActivity {
+
+    // Define the ESP32 IP addresses for ON and OFF
+    private static final String ESP32_ON_URL = "http://192.168.1.151/on";
+    private static final String ESP32_OFF_URL = "http://192.168.1.151/off";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        // Button references
+        Button btnTurnOn = findViewById(R.id.btnTurnOn);
+        Button btnTurnOff = findViewById(R.id.btnTurnOff);
+
+        // Turn on LED button click listener
+        btnTurnOn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendHttpRequest(ESP32_ON_URL);
+            }
+        });
+
+        // Turn off LED button click listener
+        btnTurnOff.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendHttpRequest(ESP32_OFF_URL);
+            }
+        });
+    }
+
+    // Method to send HTTP request to ESP32
+    private void sendHttpRequest(final String urlString) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    // Create a URL object from the URL string
+                    URL url = new URL(urlString);
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                    connection.setRequestMethod("GET");
+                    connection.connect();
+
+                    int responseCode = connection.getResponseCode();
+                    if (responseCode == HttpURLConnection.HTTP_OK) {
+                        // Successful request
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(MainActivity.this, "LED State Changed", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } else {
+                        // Failed request
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(MainActivity.this, "Failed to Change LED State", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(MainActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+        }).start();
+    }
+}
+
+
