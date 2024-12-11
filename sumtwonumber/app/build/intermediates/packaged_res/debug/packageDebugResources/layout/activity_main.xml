@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- First Input Field -->
+    <EditText
+        android:id="@+id/number1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter first number"
+        android:inputType="numberDecimal"
+        android:minHeight="48dp"
+        android:padding="8dp" />
+
+    <!-- Second Input Field -->
+    <EditText
+        android:id="@+id/number2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter second number"
+        android:inputType="numberDecimal"
+        android:minHeight="48dp"
+        android:padding="8dp" />
+
+    <!-- Button Layout for Operations -->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="16dp">
+
+        <!-- Sum Button -->
+        <Button
+            android:id="@+id/sumButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sum"
+            android:minHeight="48dp"
+            android:layout_margin="8dp"
+            android:paddingHorizontal="16dp" />
+
+        <!-- Minus Button -->
+        <Button
+            android:id="@+id/minusButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Minus"
+            android:minHeight="48dp"
+            android:layout_margin="8dp"
+            android:paddingHorizontal="16dp" />
+
+        <!-- Multiply Button -->
+        <Button
+            android:id="@+id/multiplyButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Multiply"
+            android:minHeight="48dp"
+            android:layout_margin="8dp"
+            android:paddingHorizontal="16dp" />
+
+        <!-- Divide Button -->
+        <Button
+            android:id="@+id/divideButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Divide"
+            android:minHeight="48dp"
+            android:layout_margin="8dp"
+            android:paddingHorizontal="16dp" />
+    </LinearLayout>
+
+    <!-- Result Display -->
+    <TextView
+        android:id="@+id/resultText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Result: "
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"
+        android:layout_gravity="center_horizontal" />
+
+    <!-- Footer Text Always at Bottom -->
+    <TextView
+        android:id="@+id/footerText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="This app is made by Satyendra"
+        android:textSize="14sp"
+        android:textColor="#666666"
+        android:gravity="center"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="16dp" />
+
+</LinearLayout>
