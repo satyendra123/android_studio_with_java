@@ -1,0 +1,208 @@
+#step-1 activity_main.xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- First Input Field -->
+    <EditText
+        android:id="@+id/number1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter first number"
+        android:inputType="numberDecimal"
+        android:minHeight="48dp"
+        android:padding="8dp" />
+
+    <!-- Second Input Field -->
+    <EditText
+        android:id="@+id/number2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter second number"
+        android:inputType="numberDecimal"
+        android:minHeight="48dp"
+        android:padding="8dp" />
+
+    <!-- Button Layout for Operations -->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="16dp">
+
+        <!-- Sum Button -->
+        <Button
+            android:id="@+id/sumButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sum"
+            android:minHeight="48dp"
+            android:layout_margin="8dp"
+            android:paddingHorizontal="16dp" />
+
+        <!-- Minus Button -->
+        <Button
+            android:id="@+id/minusButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Minus"
+            android:minHeight="48dp"
+            android:layout_margin="8dp"
+            android:paddingHorizontal="16dp" />
+
+        <!-- Multiply Button -->
+        <Button
+            android:id="@+id/multiplyButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Multiply"
+            android:minHeight="48dp"
+            android:layout_margin="8dp"
+            android:paddingHorizontal="16dp" />
+
+        <!-- Divide Button -->
+        <Button
+            android:id="@+id/divideButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Divide"
+            android:minHeight="48dp"
+            android:layout_margin="8dp"
+            android:paddingHorizontal="16dp" />
+    </LinearLayout>
+
+    <!-- Result Display -->
+    <TextView
+        android:id="@+id/resultText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Result: "
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"
+        android:layout_gravity="center_horizontal" />
+
+    <!-- Footer Text Always at Bottom -->
+    <TextView
+        android:id="@+id/footerText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="This app is made by Satyendra"
+        android:textSize="14sp"
+        android:textColor="#666666"
+        android:gravity="center"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="16dp" />
+
+</LinearLayout>
+
+
+#step-2 MainActivity.java
+package com.example.sumtwonumber;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+    private EditText number1, number2;
+    private TextView resultText;
+    private Button sumButton, minusButton, multiplyButton, divideButton;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        // Initialize views
+        number1 = findViewById(R.id.number1);
+        number2 = findViewById(R.id.number2);
+        resultText = findViewById(R.id.resultText);
+
+        sumButton = findViewById(R.id.sumButton);
+        minusButton = findViewById(R.id.minusButton);
+        multiplyButton = findViewById(R.id.multiplyButton);
+        divideButton = findViewById(R.id.divideButton);
+
+        // Set click listeners for the buttons
+        sumButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                performOperation("sum");
+            }
+        });
+
+        minusButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                performOperation("minus");
+            }
+        });
+
+        multiplyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                performOperation("multiply");
+            }
+        });
+
+        divideButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                performOperation("divide");
+            }
+        });
+    }
+
+    // Method to perform the operation based on the button clicked
+    private void performOperation(String operation) {
+        // Get the input values
+        String num1Str = number1.getText().toString();
+        String num2Str = number2.getText().toString();
+
+        if (num1Str.isEmpty() || num2Str.isEmpty()) {
+            Toast.makeText(this, "Please enter both numbers", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Parse the input numbers
+        double num1 = Double.parseDouble(num1Str);
+        double num2 = Double.parseDouble(num2Str);
+        double result = 0;
+
+        // Perform the selected operation
+        switch (operation) {
+            case "sum":
+                result = num1 + num2;
+                break;
+            case "minus":
+                result = num1 - num2;
+                break;
+            case "multiply":
+                result = num1 * num2;
+                break;
+            case "divide":
+                if (num2 != 0) {
+                    result = num1 / num2;
+                } else {
+                    Toast.makeText(this, "Cannot divide by zero", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                break;
+        }
+
+        // Display the result
+        resultText.setText("Result: " + result);
+    }
+}
+
