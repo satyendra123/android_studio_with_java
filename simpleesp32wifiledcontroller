@@ -1,0 +1,183 @@
+#step-1 AndroidManifest.xml
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Internet permission required to make HTTP requests -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Homeautomation"
+        tools:targetApi="31"
+        android:usesCleartextTraffic="true">
+        
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
+
+#step-2 activity_main.xml
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/et_ip_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter ESP32 IP Address"
+        android:inputType="text" />
+
+    <Button
+        android:id="@+id/btn_turn_on"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Turn On"
+        android:layout_below="@id/et_ip_address"
+        android:layout_marginTop="16dp"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:id="@+id/btn_turn_off"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Turn Off"
+        android:layout_below="@id/et_ip_address"
+        android:layout_marginTop="16dp"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:id="@+id/tv_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Status: OFF"
+        android:layout_below="@id/btn_turn_on"
+        android:layout_marginTop="32dp" />
+
+    <!-- Footer TextView -->
+    <TextView
+        android:id="@+id/tv_footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="This app is made by Satyendra"
+        android:textAlignment="center"
+        android:textSize="12sp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="16dp" />
+
+</RelativeLayout>
+
+
+#step-3 MainActivity.java
+package com.example.homeautomation;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+public class MainActivity extends AppCompatActivity {
+
+    private EditText etIpAddress;
+    private Button btnTurnOn, btnTurnOff;
+    private TextView tvStatus;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        etIpAddress = findViewById(R.id.et_ip_address);
+        btnTurnOn = findViewById(R.id.btn_turn_on);
+        btnTurnOff = findViewById(R.id.btn_turn_off);
+        tvStatus = findViewById(R.id.tv_status);
+
+        btnTurnOn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String ipAddress = etIpAddress.getText().toString();
+                if (!ipAddress.isEmpty()) {
+                    sendRequest(ipAddress, "/turn_on");
+                } else {
+                    Toast.makeText(MainActivity.this, "Please enter the IP address", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        btnTurnOff.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String ipAddress = etIpAddress.getText().toString();
+                if (!ipAddress.isEmpty()) {
+                    sendRequest(ipAddress, "/turn_off");
+                } else {
+                    Toast.makeText(MainActivity.this, "Please enter the IP address", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void sendRequest(final String ipAddress, final String endpoint) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    // Construct the URL for the ESP32 endpoint
+                    URL url = new URL("http://" + ipAddress + endpoint);
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                    connection.setRequestMethod("GET");
+
+                    int responseCode = connection.getResponseCode();
+                    if (responseCode == HttpURLConnection.HTTP_OK) {
+                        // Handle success
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                tvStatus.setText("Status: " + (endpoint.equals("/turn_on") ? "ON" : "OFF"));
+                            }
+                        });
+                    } else {
+                        // Handle failure
+                        showError("Failed to send request");
+                    }
+                } catch (IOException e) {
+                    showError("Error: " + e.getMessage());
+                }
+            }
+        }).start();
+    }
+
+    private void showError(final String errorMessage) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(MainActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+}
+
+
