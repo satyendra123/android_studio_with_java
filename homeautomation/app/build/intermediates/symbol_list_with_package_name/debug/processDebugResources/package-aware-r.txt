@@ -3139,8 +3139,13 @@ id bounce
 id bounceBoth
 id bounceEnd
 id bounceStart
-id btn_turn_off
-id btn_turn_on
+id btn_go_to_control
+id btn_go_to_settings
+id btn_set_ip
+id btn_turn_off_fan
+id btn_turn_off_light
+id btn_turn_on_fan
+id btn_turn_on_light
 id buttonPanel
 id cache_measures
 id callMeasure
@@ -3515,7 +3520,6 @@ id transition_position
 id transition_scene_layoutid_cache
 id transition_transform
 id triangle
-id tv_footer
 id tv_status
 id unchecked
 id uniform
@@ -3654,6 +3658,7 @@ layout abc_search_dropdown_item_icons_2line
 layout abc_search_view
 layout abc_select_dialog_material
 layout abc_tooltip
+layout activity_control
 layout activity_main
 layout custom_dialog
 layout design_bottom_navigation_item

@@ -7,7 +7,6 @@
     <uses-sdk
         android:minSdkVersion="24"
         android:targetSdkVersion="34" />
-
     <!-- Internet permission required to make HTTP requests -->
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -31,6 +30,9 @@
         android:testOnly="true"
         android:theme="@style/Theme.Homeautomation"
         android:usesCleartextTraffic="true" >
+        <activity
+            android:name="com.example.homeautomation.ControlActivity"
+            android:exported="false" />
         <activity
             android:name="com.example.homeautomation.MainActivity"
             android:exported="true" >

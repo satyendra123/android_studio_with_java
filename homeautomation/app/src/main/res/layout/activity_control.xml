@@ -1,0 +1,57 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/btn_turn_on_light"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="16dp"
+        android:text="Turn ON Light" />
+
+    <Button
+        android:id="@+id/btn_turn_off_light"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="16dp"
+        android:text="Turn OFF Light" />
+
+    <Button
+        android:id="@+id/btn_turn_on_fan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btn_turn_on_light"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="16dp"
+        android:text="Turn ON Fan" />
+
+    <Button
+        android:id="@+id/btn_turn_off_fan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btn_turn_off_light"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="16dp"
+        android:text="Turn OFF Fan" />
+
+    <TextView
+        android:id="@+id/tv_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp"
+        android:text="Status: OFF"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/btn_go_to_settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="32dp"
+        android:text="Go to Settings" />
+
+</RelativeLayout>
